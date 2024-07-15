@@ -1,0 +1,170 @@
+---
+title: 
+output: html_notebook
+---
+
+```{r}
+#load packages
+#install.packages("palmerpenguins")
+library(palmerpenguins)
+
+#install.packages("ggthemes")
+library(ggthemes)
+```
+
+## Basic Scatterplot
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = flipper_length_mm,
+    y = body_mass_g,
+    color = species
+  )
+) +
+  geom_point()
+```
+
+\`\` \## Scatterplot with Line of Best Fit and Correlation by Species
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = flipper_length_mm,
+    y = body_mass_g,
+    color = species # color here
+  )
+) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## Scatterplot with Line of Best Fit and Correlation by Species
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species # color here
+  )
+) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+cor.test(penguins$bill_length_mm, penguins$bill_depth_mm)
+```
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = flipper_length_mm,
+    y = body_mass_g
+  )) + 
+  geom_point(aes(colour = bill_depth_mm), na.rm = TRUE) + 
+  geom_smooth(na.rm = TRUE)
+```
+
+## Overlayed Density
+
+```{r}
+ggplot(penguins, aes(
+  x = body_mass_g,
+  color = species,
+  fill = species
+)) +
+  geom_density(alpha = 0.5)
+```
+
+## Boxplot
+
+```{r}
+ggplot(penguins, aes(
+  y = species,
+  x = body_mass_g
+)) +
+  geom_boxplot() 
+```
+
+## Barcharts
+
+```{r}
+### Grouped
+penguins |>
+  ggplot(aes(fill = sex, x = species)) +
+  geom_bar(position = "dodge")             # dodge
+
+### Stacked
+penguins |>
+  ggplot(aes(fill = sex, x = species)) +
+  geom_bar()
+
+### Percent Stacked
+penguins |>
+  ggplot(aes(fill = sex, x = species)) +
+  geom_bar(position = "fill")              
+```
+## Using facets to view data differently
+```{r}
+penguins |>
+  na.omit(sex) |>
+  ggplot(aes(
+    x = flipper_length_mm,
+    y = body_mass_g
+  )) +
+  geom_point(aes(
+    color = species,
+    shape = species
+  )) +
+  facet_wrap(~sex)
+```
+## Facet Wrap with trend lines for islands
+```{r}
+penguins |>
+  na.omit() |>
+  ggplot(aes(
+    x = flipper_length_mm,
+    y = body_mass_g
+  )) +
+  geom_point(aes(
+    color = species,
+    shape = species
+  )) +
+  geom_smooth() +
+  facet_wrap(~island)
+```
+## Filtered with dplyr before graphing
+```{r, echo=FALSE}
+ggplot(mpg, aes(x = displ, y =  hwy)) + geom_point() + geom_point(data = dplyr::filter(mpg, displ > 4, hwy > 20), colour = 'blue', size = 2)
+```
+## MPG filtered by drivetrain and displ
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) + geom_point() + geom_smooth()
+```
+
+```{r}
+ggplot(penguins, aes(
+
+  x = bill_length_mm,
+
+  y = bill_depth_mm
+
+)) +
+
+  geom_point() +
+
+  facet_wrap(species)
+```
+
+
+
+
+
+
+
+
+
